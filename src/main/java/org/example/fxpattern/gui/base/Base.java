@@ -14,9 +14,11 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
-public class Base  implements Initializable {
+public class Base implements Initializable {
 
     @FXML
     private BorderPane borderPane;
@@ -42,16 +44,27 @@ public class Base  implements Initializable {
 
     }
 
+    private Map<String, Parent> map = new HashMap<>();
+
     private void loadUi(String str) {
+
+        if (map.containsKey(str)) {
+            borderPane.setCenter(map.get(str));
+            return;
+        }
+
 
         Parent root = null;
         String pathString = format(str);
         URL location = getClass().getResource(pathString);
+
+
         try {
             root = FXMLLoader.load(location);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        map.put(str, root);
         borderPane.setCenter(root);
 
     }
